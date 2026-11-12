@@ -1,0 +1,4 @@
+.fm-closer { padding-block: 80px; }
+.fm-closer-head { text-align: center; padding-inline: var(--fm-pad); }
+.fm-closer-title { font-size: clamp(var(--fs-h3), 4vw, var(--fs-display-lg)); line-height: 1.1; }
+.fm-closer-rows { display: flex; flex-direction: column; gap: clamp(64px, 11vw, 160px); margin-top: 60px; }

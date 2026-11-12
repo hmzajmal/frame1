@@ -1,0 +1,8 @@
+.fm-faq { padding: 120px var(--fm-pad); }
+.fm-faq-title { max-width: 12ch; font-size: clamp(var(--fs-h3), 4vw, var(--fs-display-lg)); line-height: 1.1; }
+.fm-faq-lede { margin-top: 20px; max-width: 34ch; font-size: var(--fs-md); line-height: 1.65; color: var(--fm-dim); }
+.fm-faq-list { border-top-color: var(--fm-line); }
+.fm-faq .faq-row { border-bottom: 1px solid var(--fm-line); }
+.fm-faq .faq-q { padding: 22px 0; font-size: var(--fs-lg); font-weight: 500; color: #fff; align-items: center; }
+.fm-faq .faq-toggle { background: rgb(255 255 255 / 0.08); color: #fff; }
+.fm-faq .faq-a { padding-bottom: 24px; font-size: var(--fs-md); line-height: 1.65; color: var(--fm-dim); }

@@ -1,0 +1,39 @@
+.cso {
+  position: fixed;
+  inset: 0;
+  z-index: 320;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  background: #131416;
+  color: #fff;
+  overflow-y: auto;
+  animation: cso-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.cso-close {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.cso-close:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.cso-close:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.6); outline-offset: 2px; }
+
+@keyframes cso-in { from { opacity: 0; transform: scale(0.985); } to { opacity: 1; transform: none; } }
+elevenlabs-convai { display: none !important; }
+@media (max-width: 960px) {
+  .cso { grid-template-columns: 1fr; align-content: start; }
+  .cso .cso-media { min-height: 240px; }
+}
+@media (prefers-reduced-motion: reduce) { .cso { animation: none; } }

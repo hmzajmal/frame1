@@ -1,0 +1,2 @@
+.fm-dots { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; transition: opacity 700ms ease; }
+.fm-dots[data-dim] { opacity: 0.55; }

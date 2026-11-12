@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-imagine-sans);
+  --font-mono: var(--font-imagine-sans);
+  --color-content-primary: #141414;
+  --color-border-primary: #00000014;
+  --color-border-secondary: #0000001f;
+  --color-border-tertiary: #0003;
+  --color-hb-surface: rgb(23 23 23);
+  --color-hb-content: rgb(255 255 255);
+  --color-hb-border: rgb(33 33 33);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-imagine-sans), sans-serif;
+}
+
+/* CTA loader (lib/cta-loader): a spinner in the clicked CTA while the next page loads. */
+.cta-spinner,
+:is(.ind-card, .mdl-card)[data-cta-loading] :is(.ind-arrow, .mdl-arrow)::after {
+  content: "";
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  vertical-align: -2px;
+  animation: cta-spin 1s linear infinite, cta-in 220ms ease-out;
+}
+[data-cta-loading] { cursor: progress; }
+:is(.ind-card, .mdl-card)[data-cta-loading] :is(.ind-arrow, .mdl-arrow) > * { display: none; }
+@keyframes cta-spin { to { transform: rotate(360deg); } }
+@keyframes cta-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .cta-spinner,
+  :is(.ind-card, .mdl-card)[data-cta-loading] :is(.ind-arrow, .mdl-arrow)::after { animation-duration: 1.6s, 220ms; }
+}

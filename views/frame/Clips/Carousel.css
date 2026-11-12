@@ -1,0 +1,15 @@
+.fm-how { position: relative; padding-block: 80px 110px; overflow: clip; }
+.fm-how-tabs { display: flex; justify-content: center; padding-inline: var(--fm-pad); }
+.fm-how-stage { --fm-cw: max(320px, 52vw); --fm-gap: 24px; --fm-sw: calc((100vw - var(--fm-cw)) / 2 - var(--fm-gap)); position: relative; height: calc(var(--fm-cw) * 9 / 16); margin-top: calc(var(--fm-cw) * 9 / 16 * 0.14 + 36px); touch-action: pan-y; user-select: none; cursor: grab; }
+.fm-how-stage:active { cursor: grabbing; }
+.fm-how-card[data-pos="left"], .fm-how-card[data-pos="right"] { cursor: pointer; }
+.fm-how-card { position: absolute; top: 0; left: 50%; width: var(--fm-cw); height: 100%; margin-left: calc(var(--fm-cw) / -2); overflow: hidden; border-radius: 16px; background: var(--fm-tile); transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), top 700ms cubic-bezier(0.22, 1, 0.36, 1), width 700ms cubic-bezier(0.22, 1, 0.36, 1), height 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms ease; }
+.fm-how-card[data-pos^="far"] { top: -14%; width: var(--fm-sw); height: 128%; border-radius: 0; opacity: 0; pointer-events: none; }
+.fm-how-card[data-pos="far-right"] { transform: translateX(calc(var(--fm-cw) + var(--fm-sw) + var(--fm-gap) * 2)); }
+.fm-how-card[data-pos="far-left"] { transform: translateX(calc(-2 * var(--fm-sw) - var(--fm-gap) * 2)); }
+.fm-how-card[data-pos="right"], .fm-how-card[data-pos="left"] { top: -14%; width: var(--fm-sw); height: 128%; border-radius: 0; opacity: 0.9; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+.fm-how-card[data-pos="right"] { transform: translateX(calc(var(--fm-cw) + var(--fm-gap))); -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 11 Q45 8 100 0 L100 100 Q45 92 0 89Z'/></svg>"); mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 11 Q45 8 100 0 L100 100 Q45 92 0 89Z'/></svg>"); }
+.fm-how-card[data-pos="left"] { transform: translateX(calc(-1 * var(--fm-sw) - var(--fm-gap))); -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 0 Q55 8 100 11 L100 89 Q55 92 0 100Z'/></svg>"); mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 0 Q55 8 100 11 L100 89 Q55 92 0 100Z'/></svg>"); }
+@keyframes fm-cap { from { opacity: 0; transform: translateY(6px); } }
+@media (max-width: 768px) { .fm-how-stage { --fm-cw: 78vw; --fm-gap: 12px; } }
+@media (prefers-reduced-motion: reduce) { .fm-how-card { transition: none; } }

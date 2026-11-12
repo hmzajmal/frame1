@@ -1,0 +1,14 @@
+.fm-tr { padding: 110px var(--fm-pad) 120px; text-align: center; }
+.fm-tr-title { font-size: clamp(var(--fs-h3), 4vw, var(--fs-display-lg)); line-height: 1.1; }
+.fm-tr-pills { display: flex; justify-content: center; margin-top: 28px; }
+.fm-tr-frame { position: relative; max-width: 1080px; aspect-ratio: 16 / 9; margin: 32px auto 0; overflow: hidden; border-radius: 20px; background: var(--fm-tile); box-shadow: inset 0 0 0 1px var(--fm-line); }
+.fm-tr-frame::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgb(0 0 0 / 0.75)); pointer-events: none; }
+.fm-tr-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 350ms ease; }
+.fm-tr-video[data-on] { opacity: 1; }
+.fm-tr-speaking { position: absolute; top: 18px; left: 18px; z-index: 1; padding: 7px 14px; border-radius: 999px; background: rgb(0 0 0 / 0.5); backdrop-filter: blur(10px); font-size: var(--fs-sm); color: rgb(255 255 255 / 0.75); animation: fm-cap 400ms ease both; }
+.fm-tr-speaking b { color: #fff; font-weight: 600; }
+.fm-tr-caption { position: absolute; left: 6%; right: 6%; bottom: 7%; z-index: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.3em; font-size: clamp(20px, 2.6vw, 38px); font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; animation: fm-cap 400ms ease both; }
+.fm-tr-caption span { color: rgb(255 255 255 / 0.35); transition: color 200ms ease; }
+.fm-tr-caption span[data-lit] { color: #fff; text-shadow: 0 2px 18px rgb(0 0 0 / 0.5); }
+@media (max-width: 768px) { .fm-tr-frame { border-radius: 14px; } }
+@media (prefers-reduced-motion: reduce) { .fm-tr-caption, .fm-tr-speaking { animation: none; } }

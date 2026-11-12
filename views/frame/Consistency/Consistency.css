@@ -1,0 +1,22 @@
+.fm-cons { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.fm-cons-v, .fm-cons-h { position: absolute; background: rgb(255 255 255 / 0.9); box-shadow: 0 0 6px rgb(0 0 0 / 0.35); }
+.fm-cons-v { width: 1px; transform-origin: 50% 0; animation: fm-cons-grow-y 280ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+.fm-cons-mark:not([data-down]) .fm-cons-v { transform-origin: 50% 100%; }
+.fm-cons-h { height: 1px; transform-origin: 100% 50%; animation: fm-cons-grow-x 300ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+.fm-cons-mark[data-side="right"] .fm-cons-h { transform-origin: 0 50%; }
+.fm-cons-dot { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgb(94 242 255 / 0.9); animation: fm-cons-dot 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.fm-cons-dot::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1px solid #5ef2ff; opacity: 0; animation: fm-cons-ping 900ms ease-out both; animation-delay: inherit; }
+.fm-cons-tag { position: absolute; display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px 5px 6px; border-radius: 8px; background: rgb(12 12 14 / 0.58); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 6px 18px rgb(0 0 0 / 0.25); font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.01em; color: #fff; white-space: nowrap; translate: 0 -50%; animation: fm-cons-tag-r 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.fm-cons-mark[data-side="left"] .fm-cons-tag { translate: -100% -50%; animation-name: fm-cons-tag-l; }
+.fm-cons-tag small { display: grid; place-items: center; min-width: 22px; height: 18px; padding: 0 4px; border-radius: 5px; background: rgb(255 255 255 / 0.1); font-size: 10px; font-variant-numeric: tabular-nums; color: rgb(255 255 255 / 0.7); }
+.fm-cons-tag svg { animation-delay: inherit; fill: none; stroke: #5ef2ff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.fm-cons-tag svg path { stroke-dasharray: 12; stroke-dashoffset: 12; animation: fm-cons-check 300ms ease-out both; animation-delay: inherit; }
+@keyframes fm-cons-grow-y { from { scale: 1 0; } to { scale: 1 1; } }
+@keyframes fm-cons-grow-x { from { scale: 0 1; } to { scale: 1 1; } }
+@keyframes fm-cons-dot { from { opacity: 0; scale: 0; } to { opacity: 1; scale: 1; } }
+@keyframes fm-cons-ping { 0% { opacity: 0.9; scale: 0.4; } 100% { opacity: 0; scale: 2.2; } }
+@keyframes fm-cons-tag-r { from { opacity: 0; translate: -8px -50%; filter: blur(4px); } to { opacity: 1; translate: 0 -50%; filter: none; } }
+@keyframes fm-cons-tag-l { from { opacity: 0; translate: calc(-100% + 8px) -50%; filter: blur(4px); } to { opacity: 1; translate: -100% -50%; filter: none; } }
+@keyframes fm-cons-check { from { stroke-dashoffset: 12; } to { stroke-dashoffset: 0; } }
+@media (max-width: 768px) { .fm-cons-tag { font-size: 10px; padding: 3px 7px 3px 4px; } .fm-cons-tag small { display: none; } }
+@media (prefers-reduced-motion: reduce) { .fm-cons *, .fm-cons-tag svg path { animation: none; stroke-dashoffset: 0; } .fm-cons-dot::after { display: none; } }

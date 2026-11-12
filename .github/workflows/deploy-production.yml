@@ -1,0 +1,152 @@
+name: deploy-production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cdn-publish
+  cancel-in-progress: false
+
+env:
+  R2_PREFIX: imagine-static-pages/landing-pages
+  CDN_BASE: https://cdn-imagine.vyro.ai/imagine-static-pages/landing-pages
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build static page bundle
+        env:
+          NEXT_STATIC_ASSET_PREFIX: ${{ env.CDN_BASE }}
+        run: npm run build:static
+
+      - name: Upload out/ to Cloudflare R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET_NAME: imagine-web
+        run: |
+          npm install -g wrangler@3
+          cd out
+          find . -type f -print0 | xargs -0 -n 1 -P 8 bash -c '
+            set -euo pipefail
+            file="$1"
+            rel="${file#./}"
+            case "${rel##*.}" in
+              html)        ct="text/html; charset=utf-8" ;;
+              css)         ct="text/css; charset=utf-8" ;;
+              js|mjs)      ct="application/javascript; charset=utf-8" ;;
+              json|map)    ct="application/json" ;;
+              svg)         ct="image/svg+xml" ;;
+              png)         ct="image/png" ;;
+              jpg|jpeg)    ct="image/jpeg" ;;
+              webp)        ct="image/webp" ;;
+              gif)         ct="image/gif" ;;
+              ico)         ct="image/x-icon" ;;
+              ttf)         ct="font/ttf" ;;
+              otf)         ct="font/otf" ;;
+              woff)        ct="font/woff" ;;
+              woff2)       ct="font/woff2" ;;
+              mp4)         ct="video/mp4" ;;
+              webm)        ct="video/webm" ;;
+              mp3)         ct="audio/mpeg" ;;
+              txt)         ct="text/plain; charset=utf-8" ;;
+              xml)         ct="application/xml" ;;
+              *)           ct="application/octet-stream" ;;
+            esac
+
+            case "${rel}" in
+              _next/static/*|*/_next/static/*)
+                cc="public, max-age=31536000, immutable" ;;
+              *.html)
+                cc="public, max-age=0, must-revalidate" ;;
+              *)
+                cc="public, max-age=3600, must-revalidate" ;;
+            esac
+
+            echo "Uploading ${rel} (${ct})"
+            for attempt in 1 2 3; do
+              if wrangler r2 object put \
+                "${R2_BUCKET_NAME}/${R2_PREFIX}/${rel}" \
+                --file="${file}" \
+                --content-type="${ct}" \
+                --cache-control="${cc}"; then
+                exit 0
+              fi
+              echo "Retry ${attempt} for ${rel}" >&2
+              sleep $((attempt * 2))
+            done
+            echo "Upload failed after 3 attempts: ${rel}" >&2
+            exit 1
+          ' _
+
+      - name: Purge BunnyCDN cache
+        run: |
+          # Both purges retry. The second one did not, and Bunny rate-limits
+          # the two together: a prefix purge followed immediately by a second
+          # call comes back 429, so a green upload ended on a red step with
+          # the files already on the CDN and the cache still serving the old
+          # build. Backoff starts above Bunny's window rather than at it.
+          purge() {
+            local encoded
+            encoded=$(node -e 'process.stdout.write(encodeURIComponent(process.argv[1]))' "$1")
+            for i in 1 2 3 4 5; do
+              if curl --fail --location --request POST \
+                "https://api.bunny.net/purge?async=false&url=${encoded}" \
+                --header 'AccessKey: ${{ secrets.BUNNYCDN_ACCESS_KEY }}'; then
+                return 0
+              fi
+              echo "Purge attempt ${i} failed for $1."
+              if [[ "$i" -eq 5 ]]; then return 1; fi
+              sleep $((15 * 2 ** (i - 1)))
+            done
+          }
+
+          purge "${CDN_BASE}/*"
+          purge "${CDN_BASE}/index.html"
+
+      - name: Verify every published page
+        run: |
+          while IFS= read -r -d '' file; do
+            rel="${file#out/}"
+            asset=$(grep -oE '_next/static/(chunks|media)/[^" ]+' "$file" | head -1)
+            if [[ -z "$asset" ]]; then
+              echo "No Next asset marker found in ${rel}"
+              exit 1
+            fi
+
+            page_url="${CDN_BASE}/${rel}"
+            verified=false
+            for i in 1 2 3 4 5 6; do
+              if curl --fail --silent "$page_url" | grep -Fq "$asset"; then
+                echo "Verified ${page_url}"
+                verified=true
+                break
+              fi
+              echo "Attempt ${i}: waiting for ${page_url} to update..."
+              sleep 20
+            done
+
+            if [[ "$verified" != true ]]; then
+              echo "CDN did not serve this build for ${page_url}"
+              exit 1
+            fi
+          done < <(find out -type f -name index.html -print0)

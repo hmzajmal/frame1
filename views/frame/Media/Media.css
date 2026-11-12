@@ -1,0 +1,3 @@
+.fm-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 700ms ease; }
+.fm-media[data-on] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .fm-media { transition: none; } }

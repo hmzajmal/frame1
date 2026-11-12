@@ -1,0 +1,31 @@
+.fm-lip { position: absolute; inset: 0; container-type: inline-size; }
+.fm-lip-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fm-lip-shade { position: absolute; inset: 0; background: radial-gradient(circle at var(--mx) var(--my), transparent 9cqw, rgb(0 0 0 / 0.42) 26cqw), linear-gradient(transparent 62%, rgb(0 0 0 / 0.72)); pointer-events: none; }
+
+.fm-lip-track { position: absolute; left: var(--mx); top: var(--my); width: var(--tw); height: var(--th); transform: translate(-50%, -50%); border-radius: 1.2cqw; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.28); transition: box-shadow 200ms ease, transform 200ms ease; }
+.fm-lip[data-speaking] .fm-lip-track { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.55), 0 0 3cqw rgb(255 255 255 / 0.18); transform: translate(-50%, -50%) scale(1.03); }
+.fm-lip-track i { position: absolute; width: 1.7cqw; height: 1.7cqw; border: 0 solid #fff; }
+.fm-lip-track i:nth-child(1) { left: -1px; top: -1px; border-left-width: 2px; border-top-width: 2px; border-top-left-radius: 1.2cqw; }
+.fm-lip-track i:nth-child(2) { right: -1px; top: -1px; border-right-width: 2px; border-top-width: 2px; border-top-right-radius: 1.2cqw; }
+.fm-lip-track i:nth-child(3) { left: -1px; bottom: -1px; border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 1.2cqw; }
+.fm-lip-track i:nth-child(4) { right: -1px; bottom: -1px; border-right-width: 2px; border-bottom-width: 2px; border-bottom-right-radius: 1.2cqw; }
+
+.fm-lip-link { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.fm-lip-link path { fill: none; stroke: rgb(255 255 255 / 0.6); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 3 4; animation: fm-lip-dash 1.2s linear infinite; }
+@keyframes fm-lip-dash { to { stroke-dashoffset: -14; } }
+
+.fm-lip-panel { position: absolute; left: 72%; top: 16%; width: 22%; display: flex; flex-direction: column; align-items: center; gap: 1.4cqw; padding: 1.5cqw; border-radius: 2cqw; background: rgb(14 14 15 / 0.62); backdrop-filter: blur(16px) saturate(1.2); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 2cqw 5cqw -1cqw rgb(0 0 0 / 0.6); }
+.fm-lip-lens { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+.fm-lip-lens canvas { display: block; width: 100%; height: 100%; }
+.fm-lip-wave { display: block; width: 100%; height: auto; }
+.fm-lip-state { display: flex; align-items: center; gap: 0.8cqw; font-size: max(10px, 1.25cqw); font-weight: 500; color: #fff; white-space: nowrap; }
+.fm-lip-state i { width: 0.9cqw; height: 0.9cqw; min-width: 6px; min-height: 6px; border-radius: 50%; background: #5ee08a; box-shadow: 0 0 0 0 rgb(94 224 138 / 0.6); animation: fm-lip-pulse 1.4s ease-out infinite; }
+@keyframes fm-lip-pulse { to { box-shadow: 0 0 0 0.9cqw rgb(94 224 138 / 0); } }
+
+.fm-lip-words { position: absolute; left: 5%; right: 30%; bottom: 7%; display: flex; flex-wrap: wrap; gap: 0 0.9cqw; font-size: max(13px, 2.5cqw); line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; }
+.fm-lip-words span { color: rgb(255 255 255 / 0.38); transition: color 120ms ease; }
+.fm-lip-words span[data-said] { color: rgb(255 255 255 / 0.78); }
+.fm-lip-words span[data-on] { color: #fff; text-shadow: 0 0 2cqw rgb(255 255 255 / 0.5); }
+
+@media (max-width: 600px) { .fm-lip-panel { width: 26%; top: 6%; } .fm-lip-state { display: none; } }
+@media (prefers-reduced-motion: reduce) { .fm-lip-link path, .fm-lip-state i { animation: none; } }

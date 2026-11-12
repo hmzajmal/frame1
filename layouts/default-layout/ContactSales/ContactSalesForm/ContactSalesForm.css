@@ -1,0 +1,187 @@
+.csf {
+  --csf-fg: #0b0b0c;
+  --csf-book-fg: #ffffff;
+  --csf-sub: #5b5b5b;
+  --csf-label: #2a2a2c;
+  /* Overridable from outside, e.g. grey fields on a white card. */
+  --csf-input: var(--csf-light-input, #ffffff);
+  --csf-input-hover: var(--csf-light-input-hover, #fafafa);
+  --csf-border: rgba(0, 0, 0, 0.1);
+  --csf-focus: rgba(0, 0, 0, 0.45);
+  --csf-ring: rgba(0, 0, 0, 0.06);
+  --csf-placeholder: rgba(0, 0, 0, 0.35);
+  --csf-btn-bg: #0b0b0c;
+  --csf-btn-fg: #ffffff;
+  --csf-btn-glow: rgba(0, 0, 0, 0.08);
+  --csf-back-border: rgba(0, 0, 0, 0.14);
+  --csf-back-bg: transparent;
+  --csf-back-fg: #2a2a2c;
+  --csf-back-hover: rgba(0, 0, 0, 0.04);
+  --csf-dash: rgba(0, 0, 0, 0.14);
+  --csf-dash-on: #0b0b0c;
+  --csf-err: #c4372c;
+  --csf-done-bg: rgba(0, 0, 0, 0.06);
+  width: 100%;
+  color: var(--csf-fg);
+}
+.csf[data-tone="dark"] {
+  --csf-fg: #ffffff;
+  --csf-book-fg: #0b0b0c;
+  --csf-sub: rgba(255, 255, 255, 0.6);
+  --csf-label: rgba(255, 255, 255, 0.88);
+  /* Overridable from outside, for a form sitting on a lighter card. */
+  --csf-input: var(--csf-dark-input, #222326);
+  --csf-input-hover: var(--csf-dark-input-hover, #26272b);
+  --csf-border: rgba(255, 255, 255, 0.06);
+  --csf-focus: rgba(255, 255, 255, 0.35);
+  --csf-ring: rgba(255, 255, 255, 0.06);
+  --csf-placeholder: rgba(255, 255, 255, 0.35);
+  --csf-btn-bg: #ffffff;
+  --csf-btn-fg: #0f1012;
+  --csf-btn-glow: rgba(255, 255, 255, 0.1);
+  --csf-back-border: transparent;
+  --csf-back-bg: rgba(255, 255, 255, 0.08);
+  --csf-back-fg: rgba(255, 255, 255, 0.85);
+  --csf-back-hover: rgba(255, 255, 255, 0.14);
+  --csf-dash: rgba(255, 255, 255, 0.18);
+  --csf-dash-on: #ffffff;
+  --csf-err: #ff8a80;
+  --csf-done-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* A card title, in the page's heading weight (9 Oct). */
+.csf-title { font-size: clamp(22px, 2vw, 26px); line-height: 1.2; font-weight: 500; letter-spacing: -0.015em; color: var(--csf-fg); }
+.csf-sub { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--csf-sub); }
+
+.csf-fields {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 16px;
+  animation: csf-step 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.csf-field { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+.csf-wide { grid-column: 1 / -1; }
+.csf-field label { font-size: 14px; font-weight: 500; color: var(--csf-label); }
+.csf-field input,
+.csf-field select,
+.csf-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--csf-border);
+  border-radius: 12px;
+  background: var(--csf-input);
+  color: var(--csf-fg);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.csf-field input, .csf-field select { height: 48px; padding: 0 14px; }
+.csf-field textarea { padding: 12px 14px; resize: vertical; min-height: 112px; line-height: 1.5; }
+.csf-field input::placeholder, .csf-field textarea::placeholder { color: var(--csf-placeholder); }
+.csf-field input:hover, .csf-field select:hover, .csf-field textarea:hover { background: var(--csf-input-hover); }
+.csf-field input:focus, .csf-field select:focus, .csf-field textarea:focus {
+  outline: none;
+  border-color: var(--csf-focus);
+  box-shadow: 0 0 0 4px var(--csf-ring);
+}
+.csf-field [aria-invalid="true"] { border-color: var(--csf-err); }
+.csf-select { position: relative; }
+.csf-select select { appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer; }
+.csf-select select option { color: #111; background: #fff; }
+.csf-select::after {
+  content: "";
+  position: absolute;
+  right: 16px; top: 50%;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid var(--csf-sub);
+  border-bottom: 1.5px solid var(--csf-sub);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.csf-required { margin-left: 3px; color: var(--csf-err); }
+.csf-phone { display: flex; gap: 8px; }
+.csf-phone input { flex: 1; min-width: 0; }
+.csf-dial {
+  position: relative; flex: none; min-width: 76px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 0 12px 0 14px; box-sizing: border-box;
+  border: 1px solid var(--csf-border); border-radius: 12px;
+  background: var(--csf-input); font-size: 15px; color: var(--csf-fg);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.csf-dial::after {
+  content: ""; width: 6px; height: 6px;
+  border-right: 1.5px solid var(--csf-sub); border-bottom: 1.5px solid var(--csf-sub);
+  transform: translateY(-30%) rotate(45deg);
+}
+.csf-dial:hover { background: var(--csf-input-hover); }
+.csf-dial:focus-within { border-color: var(--csf-focus); box-shadow: 0 0 0 4px var(--csf-ring); }
+.csf-field .csf-dial select {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer; border: 0; padding: 0;
+}
+.csf-dial select option { color: #111; background: #fff; }
+.csf-err { font-size: 12.5px; color: var(--csf-err); }
+.csf-fail { margin-top: 16px; font-size: 14px; color: var(--csf-err); }
+
+.csf-foot { margin-top: 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.csf-progress { display: flex; gap: 6px; }
+.csf-progress span { width: 36px; height: 3px; border-radius: 999px; background: var(--csf-dash); transition: background 0.3s; }
+.csf-progress span[data-on="true"] { background: var(--csf-dash-on); }
+.csf-actions { display: flex; align-items: center; gap: 10px; }
+.csf-next, .csf-back {
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+.csf-next { border: 0; background: var(--csf-btn-bg); color: var(--csf-btn-fg); }
+.csf-next:hover { box-shadow: 0 0 0 5px var(--csf-btn-glow); }
+.csf-next:disabled { opacity: 0.6; cursor: progress; }
+.csf-back { border: 1px solid var(--csf-back-border); background: var(--csf-back-bg); color: var(--csf-back-fg); }
+.csf-back:hover { background: var(--csf-back-hover); }
+.csf-next:focus-visible, .csf-back:focus-visible { outline: 2px solid var(--csf-fg); outline-offset: 3px; }
+
+.csf-done { display: flex; flex-direction: column; align-items: flex-start; }
+.csf-book {
+  margin-top: 20px; display: inline-flex; align-items: center; gap: 8px;
+  height: 46px; padding: 0 24px; border-radius: 999px;
+  background: var(--csf-fg); color: var(--csf-book-fg);
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.csf-book:hover { transform: scale(1.02); box-shadow: 0 0 0 6px var(--csf-done-bg); }
+.csf-done-icon {
+  width: 48px; height: 48px; margin-bottom: 22px;
+  border-radius: 999px; display: grid; place-items: center;
+  background: var(--csf-done-bg); color: var(--csf-fg);
+}
+
+/* Compact: a form inside a card, as in the main page's contact band. */
+.csf[data-compact] .csf-title { font-size: clamp(20px, 1.8vw, 24px); }
+.csf[data-compact] .csf-sub { margin-top: 8px; font-size: 14px; }
+.csf[data-compact] .csf-fields { margin-top: 24px; gap: 16px 14px; }
+.csf[data-compact] .csf-field { gap: 7px; }
+.csf[data-compact] .csf-field label { font-size: 13px; }
+.csf[data-compact] .csf-field input,
+.csf[data-compact] .csf-field select { height: 42px; font-size: 14.5px; border-radius: 10px; }
+.csf[data-compact] .csf-dial { font-size: 14.5px; border-radius: 10px; }
+.csf[data-compact] .csf-field textarea { min-height: 96px; font-size: 14.5px; border-radius: 10px; }
+.csf[data-compact] .csf-foot { margin-top: 26px; }
+.csf[data-compact] .csf-next, .csf[data-compact] .csf-back { height: 42px; }
+
+@keyframes csf-step { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 560px) {
+  .csf-fields { grid-template-columns: 1fr; }
+  .csf-foot { flex-direction: column-reverse; align-items: stretch; }
+  .csf-actions { justify-content: flex-end; }
+  .csf-progress { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .csf-fields { animation: none; }
+}

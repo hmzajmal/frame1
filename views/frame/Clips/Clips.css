@@ -1,0 +1,6 @@
+.fm-clips { padding-top: 96px; }
+.fm-clips-title { margin-bottom: 36px; padding-inline: var(--fm-pad); text-align: center; font-size: clamp(var(--fs-h3), 4vw, var(--fs-display-lg)); line-height: 1.1; }
+.fm-clips-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fm-clips-motion { opacity: 0; transition: opacity 500ms ease; }
+.fm-clips-motion[data-ready] { opacity: 1; }
+.fm-clips-volume { left: 50%; right: auto; top: 16px; translate: calc(var(--fm-cw) / 2 - 56px) 0; }
